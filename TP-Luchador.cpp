@@ -38,7 +38,6 @@ struct strLuchador {
     int peso ; 
     int victorias , derrotas ;
 };
-
 struct NODO {
     int ID ;
     char nombre[35] ;
@@ -48,7 +47,7 @@ struct NODO {
     NODO *next ; 
 };
 
-void agregarpila (NODO *&topepila, strLuchador n) {
+void agregar_a_pila (NODO *&topepila, strLuchador n) {
     
     NODO *nuevo = new NODO ;
     
@@ -81,30 +80,31 @@ void quitar_de_pila (NODO *&TopePila, strLuchador &n) {
 return ; }
 // Quita el último Nodo de la pila
 
-/*
-
-void mostrarpila (NODO *topepila) {
-    NODO *aux = topepila ;
-
-    while (aux!=NULL) {
-
-        ;
-
-        topepila = aux->next ;
-        aux = topepila ;
+void startUP (FILE *archivo, NODO *&topepila) {
+    strLuchador luchador ;
+    while (fread(&luchador, sizeof(strLuchador), 1, archivo)) {
+        agregar_a_pila (topepila, luchador) ;
     }
-
-return ; }
-
-HACER */
-
+}
+// Carga el contenido del archivo a la lista dinámica
 
 
 
 int main() {
 
-    FILE *archivo = fopen ( "TOP_Luchadores.dat" , "wb+" ) ;
+    NODO *topePila = NULL ;
+
+    FILE *archivo = fopen ( "GIMNASIO.dat" , "rb" ) ;
+    startUP (archivo,topePila) ;
+    fclose (archivo) ;
+
+
+    FILE *archivo = fopen ( "GIMNASIO.dat" , "wb+" ) ;
     strLuchador TOPLuchador[10] , LuchadoresLiga[1000] ;
+
+
+
+
 
 
 
