@@ -33,15 +33,15 @@ using namespace std;
 
 struct strLuchador {
     int ID ;
-    char nombre[35] ;
-    char apodo[35] ; 
+    char nombre[35+1] ;
+    char apodo[35+1] ; 
     int peso ; 
     int victorias , derrotas ;
 };
 struct NODO {
     int ID ;
-    char nombre[35] ;
-    char apodo[35] ; 
+    char nombre[35+1] ;
+    char apodo[35+1] ; 
     int peso ; 
     int victorias , derrotas ;
     NODO *next ; 
@@ -82,11 +82,69 @@ return ; }
 
 void startUP (FILE *archivo, NODO *&topepila) {
     strLuchador luchador ;
+    
+    int PosActual = ftell (archivo) ;
+    fseek (archivo,0,SEEK_END) ; 
+
     while (fread(&luchador, sizeof(strLuchador), 1, archivo)) {
         agregar_a_pila (topepila, luchador) ;
     }
+    
+    fseek (archivo,PosActual,SEEK_SET) ; 
+
+return ;
 }
 // Carga el contenido del archivo a la lista dinámica
+
+bool validacion(int opcion){
+    if(opcion >= 0 && opcion < 6){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+// Valida el numero del menu
+
+void inscribir_atleta (strLuchador luchadoresliga[] , int PosLuchador) {
+    
+    cout << "Ingrese su atleta" << endl;
+    cout << "ID: "; cin >> luchadoresliga[PosLuchador].ID ;
+    cout << "Nombre: ";
+    cin.ignore();
+    cin.getline(luchadoresliga[PosLuchador].nombre,35+1,'\n');
+    cout << "Apodo: ";
+    cin.ignore();
+    cin.getline(luchadoresliga[PosLuchador].apodo,35+1,'\n');
+    cout << "Peso: "; cin >> luchadoresliga[PosLuchador].peso ;
+    cout << "Racha de Victorias: "; cin >> luchadoresliga[PosLuchador].victorias ;
+    cout << "Racha de Derrotas: "; cin >> luchadoresliga[PosLuchador].derrotas ;
+
+    PosLuchador++;
+
+    OrdVector (luchadoresliga, PosLuchador) ;
+    
+return ; }
+
+void OrdVector (strLuchador luchadoresliga[] , int PosLuchador) {
+    strLuchador aux;
+	for (int i=1; i < PosLuchador-1 ; i++){
+		for (int j=1; j < PosLuchador-i ; j++){
+			if((luchadoresliga[j-1].victorias-luchadoresliga[j-1].derrotas) < (luchadoresliga[j].victorias-luchadoresliga[j].derrotas)){
+				aux = luchadoresliga[j-1];
+				luchadoresliga[j-1]= luchadoresliga[j];
+				luchadoresliga[j] = aux;
+			}
+		}
+	}
+return ; }
+// Ordena el vector de luchadores por victorias - derrotas
+
+void actualizar_record(){
+
+    
+
+}
 
 
 
@@ -94,19 +152,51 @@ int main() {
 
     NODO *topePila = NULL ;
 
-    FILE *archivo = fopen ( "GIMNASIO.dat" , "rb" ) ;
-    startUP (archivo,topePila) ;
-    fclose (archivo) ;
-
-
     FILE *archivo = fopen ( "GIMNASIO.dat" , "wb+" ) ;
-    strLuchador TOPLuchador[10] , LuchadoresLiga[1000] ;
+    strLuchador TOPLuchador[10] , LuchadoresLiga[1000] , CombatesEstelares[5] ;
+
+    int opcion ;
+    int posLuchador = 0;
+    do {
+        cout << "____QUE DESEA HACER____" << endl ;
+        cout << "0. Cargar Gimnasio" << endl ;
+        cout << "1. Inscribir un atleta" << endl ;
+        cout << "2. Generar Main Card" << endl ;
+        cout << "3. Actualizar Record" << endl ;
+        cout << "4. Guardar Gimnasio" << endl ;
+        cout << "5. SALIR" << endl ;
+        cin >> opcion ;
+        while (!validacion(opcion)) {  // Validación
+            if (cin.fail()) {
+                cin.clear() ; 
+                continue ;
+            cout << "Ingrese un input valido: " ; cin >> opcion ;
+            }
+        }
+            switch (opcion) {
+            case 0:
+                startUP (archivo,topePila) ;
+                break;
+            case 1:
+                inscribir_atleta(LuchadoresLiga, posLuchador);
+                break;
+            case 2:
+                
+                break;            
+            case 3:
+                actualizar_record();
+                break;
+            case 4:
+                
+                break;
+            default: break;            
+        }
+    } while (opcion!=5) ;  // MENU
 
 
 
 
-
-
+    
 
     fclose (archivo) ;
 
