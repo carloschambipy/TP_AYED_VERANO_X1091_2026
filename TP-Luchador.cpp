@@ -48,7 +48,6 @@ struct NODO {
 };
 
 void agregar_a_pila (NODO *&topepila, strLuchador n) {
-    
     NODO *nuevo = new NODO ;
     
     nuevo -> ID = n.ID  ;
@@ -64,7 +63,6 @@ return ; }
 // Agrega un Nodo a la pila
 
 void quitar_de_pila (NODO *&TopePila, strLuchador &n) {
-    
     NODO *aux = TopePila ;
     
     n.ID = aux -> ID ;
@@ -79,6 +77,18 @@ void quitar_de_pila (NODO *&TopePila, strLuchador &n) {
 
 return ; }
 // Quita el último Nodo de la pila
+
+void copiar_de_pila (NODO *&TopePila, strLuchador &n) {
+    
+    n.ID = TopePila -> ID ;
+    strcpy (n.nombre,TopePila->nombre) ;
+    strcpy (n.apodo,TopePila->apodo) ;
+    n.peso = TopePila -> peso ;
+    n.victorias = TopePila -> victorias ;
+    n.derrotas = TopePila -> derrotas ;
+
+return ; }
+// Copia en la variable que se le pase la información del puntero de pila que se le pase
 
 void startUP (FILE *archivo, NODO *&topepila) {
     strLuchador luchador ;
@@ -96,15 +106,35 @@ return ;
 }
 // Carga el contenido del archivo a la lista dinámica
 
-bool validacion(int opcion){
-    if(opcion >= 0 && opcion < 6){
-        return true;
+void GuardarListaDinamica (FILE *archivo, NODO *&topepila) {
+    strLuchador luchador ;
+    fseek (archivo,0,SEEK_END) ; 
+
+    while (topepila!=NULL) {
+        quitar_de_pila (topepila, luchador) ;
+        fwrite (&luchador, sizeof(strLuchador), 1 , archivo) ;
     }
-    else{
-        return false;
-    }
+
+return ;
 }
-// Valida el numero del menu
+// Carga la lista dinámica al archivo binario
+
+void MainCard (NODO *&topepila, strLuchador CombatesEstelares[]) {
+    NODO *aux = topepila , *next ;
+    for (int i=0;i<5;i++) {
+        copiar_de_pila (aux, CombatesEstelares[i]) ;
+        next = aux -> next ;
+        aux = next ;
+    }
+return ; }
+// Copia los primeros cinco elementos de la pila a CombatesEstelares[]
+
+bool validacion(int opcion){
+    if ((opcion>=0) && (opcion<6)) { return true ; }
+return false ; }
+// Valida el numero del menú
+
+
 
 void inscribir_atleta (strLuchador luchadoresliga[] , int PosLuchador) {
     
@@ -125,7 +155,7 @@ void inscribir_atleta (strLuchador luchadoresliga[] , int PosLuchador) {
     OrdVector (luchadoresliga, PosLuchador) ;
     
 return ; }
-
+// PREGUNTAR
 void OrdVector (strLuchador luchadoresliga[] , int PosLuchador) {
     strLuchador aux;
 	for (int i=1; i < PosLuchador-1 ; i++){
@@ -140,10 +170,8 @@ void OrdVector (strLuchador luchadoresliga[] , int PosLuchador) {
 return ; }
 // Ordena el vector de luchadores por victorias - derrotas
 
-void actualizar_record(){
-
-    
-
+void actualizar_record(){ // HACER
+    ;
 }
 
 
@@ -154,9 +182,8 @@ int main() {
 
     FILE *archivo = fopen ( "GIMNASIO.dat" , "wb+" ) ;
     strLuchador TOPLuchador[10] , LuchadoresLiga[1000] , CombatesEstelares[5] ;
-
-    int opcion ;
-    int posLuchador = 0;
+    
+    int opcion , posLuchador = 0 ;
     do {
         cout << "____QUE DESEA HACER____" << endl ;
         cout << "0. Cargar Gimnasio" << endl ;
@@ -165,38 +192,36 @@ int main() {
         cout << "3. Actualizar Record" << endl ;
         cout << "4. Guardar Gimnasio" << endl ;
         cout << "5. SALIR" << endl ;
-        cin >> opcion ;
-        while (!validacion(opcion)) {  // Validación
+        cout << "-> " ; cin >> opcion ;
+        while (!validacion(opcion)) {  // Validación  
             if (cin.fail()) {
                 cin.clear() ; 
                 continue ;
             cout << "Ingrese un input valido: " ; cin >> opcion ;
             }
         }
-            switch (opcion) {
+        switch (opcion) {
             case 0:
                 startUP (archivo,topePila) ;
                 break;
             case 1:
-                inscribir_atleta(LuchadoresLiga, posLuchador);
+                ;
                 break;
             case 2:
-                
+                MainCard (topePila, CombatesEstelares) ;
                 break;            
             case 3:
-                actualizar_record();
+                ;
                 break;
             case 4:
-                
+            //  fclose (archivo) ;
+            //  FILE *archivo = fopen ( "GIMNASIO.dat" , "wb" ) ;
+            //  PREGUNTAR
+                GuardarListaDinamica (archivo, topePila) ;
                 break;
             default: break;            
         }
     } while (opcion!=5) ;  // MENU
-
-
-
-
-    
 
     fclose (archivo) ;
 
