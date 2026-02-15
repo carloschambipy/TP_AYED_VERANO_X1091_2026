@@ -195,11 +195,8 @@ int main() {
         cout << "5. SALIR" << endl ;
         cout << "-> " ; cin >> opcion ;
         while (!validacion(opcion)) {  // Validación  
-            if (cin.fail()) {
-                cin.clear() ; 
-                continue ;
+            if (cin.fail()) { cin.clear() ; }
             cout << "Ingrese un input valido: " ; cin >> opcion ;
-            }
         }
         switch (opcion) {
             case 0:
@@ -227,3 +224,4 @@ int main() {
     fclose (archivo) ;
 
 return 0; }
+
