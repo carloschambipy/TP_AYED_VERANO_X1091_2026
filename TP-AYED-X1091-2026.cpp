@@ -119,7 +119,7 @@ return ;
 }
 // Carga la lista dinámica al archivo binario
 
-void MainCard (NODO *&topepila, strLuchador CombatesEstelares[]) {
+void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) {
     NODO *aux = topepila , *next ;
     for (int i=0;i<5;i++) {
         copiar_de_pila (aux, CombatesEstelares[i]) ;
@@ -128,6 +128,7 @@ void MainCard (NODO *&topepila, strLuchador CombatesEstelares[]) {
     }
 return ; }
 // Copia los primeros cinco elementos de la pila a CombatesEstelares[]
+// No mueve el tope de pila ni borra elementos 
 
 bool validacion(int opcion){
     if ((opcion>=0) && (opcion<6)) { return true ; }
