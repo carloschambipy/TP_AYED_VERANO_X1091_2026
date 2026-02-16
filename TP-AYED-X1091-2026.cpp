@@ -43,7 +43,7 @@ struct NODO {
     NODO *next ;
 };
 
-void agregar_a_pila(NODO *&topepila, strLuchador n) {
+void agregar_a_pila (NODO *&topepila, strLuchador n) {
     NODO *nuevo = new NODO() ;
 
     nuevo->info.ID = n.ID ;
@@ -57,7 +57,7 @@ void agregar_a_pila(NODO *&topepila, strLuchador n) {
 return ; }
 // Agrega un Nodo a la pila
 
-void quitar_de_pila(NODO *&TopePila, strLuchador &n) {
+void quitar_de_pila (NODO *&TopePila, strLuchador &n) {
     NODO *aux = TopePila ;
 
     n.ID = aux->info.ID ;
@@ -72,7 +72,7 @@ void quitar_de_pila(NODO *&TopePila, strLuchador &n) {
 return ; }
 // Quita el último Nodo de la pila
 
-void copiar_de_pila(NODO *TopePila, strLuchador &n) {
+void copiar_de_pila (NODO *TopePila, strLuchador &n) {
 
     n.ID = TopePila->info.ID ;
     strcpy(n.nombre, TopePila->info.nombre) ;
@@ -85,7 +85,7 @@ return ; }
 // Copia en la variable que se le pase la información del puntero de pila que se le pase
 // No mueve el puntero de pila
 
-void mover_de_pila(NODO *&TopePila1, NODO *&TopePila2) {
+void mover_de_pila (NODO *&TopePila1, NODO *&TopePila2) {
     strLuchador elem_a_mover ;
     quitar_de_pila (TopePila2, elem_a_mover) ; 
     agregar_a_pila (TopePila1, elem_a_mover) ;
@@ -93,7 +93,7 @@ return ; }
 // Mueve un elemento de una pila a la otra
 // Pila1 recibe el elemento, Pila2 entrega el elemento
 
-void startUP(FILE *archivo, NODO *&topepila) {
+void startUP (FILE *archivo, NODO *&topepila) {
     strLuchador luchador ;
 
     int PosActual = ftell(archivo) ;
@@ -108,7 +108,7 @@ void startUP(FILE *archivo, NODO *&topepila) {
 return ; }
 // Carga el contenido del archivo a la lista dinámica
 
-void GuardarListaDinamica(FILE *archivo, NODO *&topepila) {
+void GuardarListaDinamica (FILE *archivo, NODO *&topepila) {
     strLuchador luchador ;
     fseek(archivo, 0, SEEK_END) ; 
 
@@ -119,7 +119,7 @@ void GuardarListaDinamica(FILE *archivo, NODO *&topepila) {
 return ;}
 // Carga la lista dinámica al archivo binario
 
-void MainCard(NODO *topepila, strLuchador CombatesEstelares[]) {
+void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) {
     NODO *aux = topepila ;
     for (int i = 0; i < 5; i++) {
         copiar_de_pila(aux, CombatesEstelares[i]) ;
@@ -129,12 +129,11 @@ return ; }
 // Copia los primeros cinco elementos de la pila a CombatesEstelares[]
 // No mueve el tope de pila ni borra elementos
 
-
-
 void OrdPila (NODO *&topepila) {
     strLuchador luchador ;
     NODO *SortPile = NULL ;
     quitar_de_pila (topepila, luchador) ;
+    if (topepila == NULL) {return ; }
     while ((topepila->info.victorias-topepila->info.derrotas)>=(luchador.victorias-luchador.derrotas)) {
         mover_de_pila (SortPile, topepila) ;
     }
@@ -145,7 +144,7 @@ void OrdPila (NODO *&topepila) {
 return ; }
 // Ordena un elemento en la pila por victorias - derrotas
 
-void inscribir_atleta(NODO *&topepila, int &PosLuchador) {
+void inscribir_atleta (NODO *&topepila, int &PosLuchador) {
     strLuchador nuevo ;
 
     cout << "Ingrese su atleta" << endl ;
@@ -155,7 +154,6 @@ void inscribir_atleta(NODO *&topepila, int &PosLuchador) {
     cin.ignore() ;
     cin.getline(nuevo.nombre, 35 + 1, '\n') ;
     cout << "Apodo: " ;
-    cin.ignore() ;
     cin.getline(nuevo.apodo, 35 + 1, '\n') ;
     cout << "Peso: " ;
     cin >> nuevo.peso ;
@@ -166,17 +164,36 @@ void inscribir_atleta(NODO *&topepila, int &PosLuchador) {
 
     agregar_a_pila (topepila, nuevo) ;
     PosLuchador++ ;
+    OrdPila (topepila) ;
 return ; }
 // Añade un atleta a la pila 
 
+void actualizar_record (NODO *topepila) { // HACER
+    NODO *topeaux = topepila ;
+    int IDatleta , victorias , derrotas , opcion ;
+    cout << "Ingrese el ID del atleta: " ; cin >> IDatleta ;
+    while (IDatleta!=topeaux->info.ID) {
+        topeaux = topeaux->next ;
+        if (topeaux==NULL) { cout << "ID No encontrado " << endl ; return ;}
+    }
+    cout << "Desea actualizar: " << endl ; 
+    cout << "1. Numero de Victorias: " << endl ; 
+    cout << "2. Numero de Derrotas: " << endl ; 
+    cout << "3. Ambas: " << endl ; 
+    cout << ": " ; cin >> opcion ;
+    if ((opcion==1)||(opcion==3)) { 
+        cout << "Ingrese el numero de victorias: " ; cin >> victorias ; 
+        topeaux->info.victorias = victorias ;
+    }
+    if ((opcion==2)||(opcion==3)) { 
+        cout << "Ingrese el numero de derrotas: " ; cin >> derrotas ;
+        topeaux->info.derrotas = derrotas ;
+    }
+return ; }
+// Actualiza el numero de victorias y/o derrotas de un atleta
 
 
-void actualizar_record() { // HACER
-    ;
-}
-
-
-int main() {
+int main() { 
 
     NODO *topePila = NULL ; 
 
@@ -198,29 +215,27 @@ int main() {
             if (cin.fail()) { cin.clear(); }
             cout << "Ingrese un input valido: "; cin >> opcion ;
         }
-        
         switch (opcion) {
-        case 0 :
-            startUP(archivo, topePila) ;
-            cout << "Archivo cargado" << endl ;
-            break ;
-        case 1 :
-            inscribir_atleta (topePila, posLuchador) ;
-//            OrdPila (topePila) ;
-            break ;
-        case 2 :
-            MainCard(topePila, CombatesEstelares) ;
-            cout << "Se realizo la Main Card" << endl ;
-            break ;
-        case 3 :
-            ;
-            break ;
-        case 4 :
-            GuardarListaDinamica(archivo, topePila) ;
-            cout << "Archivo guardado" << endl ;
-            break ;
-        case 5 :
-            break ;
+            case 0 :
+                startUP (archivo, topePila) ;
+                cout << "Archivo cargado" << endl ;
+                break ;
+            case 1 :
+                inscribir_atleta (topePila, posLuchador) ;
+                break ;
+            case 2 :
+                MainCard (topePila, CombatesEstelares) ;
+                cout << "Se realizo la Main Card" << endl ;
+                break ;
+            case 3 :
+                actualizar_record (topePila) ;
+                break ;
+            case 4 :
+                GuardarListaDinamica (archivo, topePila) ;
+                cout << "Archivo guardado" << endl ;
+                break ;
+            case 5 :
+                break ;
         }
     } while (opcion != 5) ; 
 
