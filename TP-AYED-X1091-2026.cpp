@@ -27,7 +27,6 @@ Requerimientos Funcionales:
 
 // c++
 #include <iostream>
-#include <fstream>
 #include <stdlib.h>
 #include <cstring>
 using namespace std;
@@ -47,24 +46,24 @@ struct NODO {
 };
 
 // Prototipos
-void agregar_a_pila (NODO *&topepila, strLuchador n);
-void quitar_de_pila (NODO *&TopePila, strLuchador &n);
-void copiar_de_pila (NODO *TopePila, strLuchador &n);
-void mostrarpila (NODO *&topepila, int cantElem);
-void mover_de_pila (NODO *&TopePila1, NODO *&TopePila2);
-void startUP (FILE *archivo, NODO *&topepila);
-void GuardarListaDinamica (FILE *archivo, NODO *&topepila);
-void MainCard (NODO *topepila, strLuchador CombatesEstelares[]);
-void OrdPila (NODO *&topepila);
-void inscribir_atleta (NODO *&topepila, int &PosLuchador);
-void actualizar_record (NODO *topepila);
+void agregar_a_pila (NODO *&topepila, strLuchador n) ;
+void quitar_de_pila (NODO *&TopePila, strLuchador &n) ;
+void copiar_de_pila (NODO *TopePila, strLuchador &n) ;
+void mostrarpila (NODO *&topepila, int cantElem) ;
+void mover_de_pila (NODO *&TopePila1, NODO *&TopePila2) ;
+void startUP (FILE *archivo, NODO *&topepila) ;
+void GuardarListaDinamica (FILE *archivo, NODO *&topepila) ;
+void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) ;
+void OrdPila (NODO *&topepila) ;
+void inscribir_atleta (NODO *&topepila, int &PosLuchador) ;
+void actualizar_record (NODO *topepila) ;
 
 
 int main() { 
     NODO *topePila = NULL ; 
     strLuchador TOPLuchador[10], CombatesEstelares[5] ;
-    FILE *archivo = fopen ("GIMNASIO.dat", "wb+") ;
-//        if (archivo==NULL) { archivo = fopen ("GIMNASIO.dat", "wb") ; }
+    FILE *archivo = fopen ("GIMNASIO.dat", "rb+") ;
+        if (archivo==NULL) { archivo = fopen ("GIMNASIO.dat", "wb") ; }
     
     int opcion, posLuchador = 0 ;
     do {
@@ -216,31 +215,32 @@ return ; }
 // No mueve el tope de pila ni borra elementos
 
 void OrdPila (NODO *&topepila) {
-    if (topepila == NULL || topepila->next == NULL) return; // nada que ordenar
+    if (topepila == NULL || topepila->next == NULL) { return; } // nada que ordenar
 
     // extraigo el elemento a insertar
-    strLuchador luchador;
-    quitar_de_pila(topepila, luchador);
-    int puntajeLuch = luchador.victorias - luchador.derrotas;
+    strLuchador luchador ;
+    quitar_de_pila(topepila, luchador) ;
+    int puntajeLuch = luchador.victorias - luchador.derrotas ;
 
-    NODO *SortPile = NULL;
+    NODO *SortPile = NULL ;
 
     // muevo los elementos con puntaje mayor arriba de la pila auxiliar
     while (topepila != NULL) {
-        int puntajeTop = topepila->info.victorias - topepila->info.derrotas;
+        int puntajeTop = topepila->info.victorias - topepila->info.derrotas ;
         if (puntajeTop > puntajeLuch) {
-            mover_de_pila(SortPile, topepila);
-        } else {
-            break;
+            mover_de_pila(SortPile, topepila) ;
+        } 
+        else {
+            break ;
         }
     }
 
     // inserto el elemento en su lugar
-    agregar_a_pila(topepila, luchador);
+    agregar_a_pila(topepila, luchador) ;
 
     // vuelvo a poner los elementos movidos
     while (SortPile != NULL) {
-        mover_de_pila(topepila, SortPile);
+        mover_de_pila(topepila, SortPile) ;
     }
 return ; }
 // Ordena un elemento en la pila por victorias - derrotas
