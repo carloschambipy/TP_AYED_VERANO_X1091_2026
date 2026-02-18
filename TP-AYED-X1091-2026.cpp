@@ -75,7 +75,7 @@ int main() {
         cout << "4. Guardar Gimnasio" << endl ;
         cout << "5. SALIR" << endl ;
         cout << "-> " ;
-        cin >> opcion ;
+        cin >> opcion , posLuchador = 0 ;
         while (!((opcion>=0) && (opcion<6))) { 
             if (cin.fail()) { cin.clear(); }
             cout << "Ingrese un input valido: "; cin >> opcion ;
@@ -162,14 +162,11 @@ return ; }
 
 void mostrarpila (NODO *&topepila, int cantElem) {
     NODO *aux = topepila ;
-    NODO *next ;
-    int i = 0 ;
-    while ( i < cantElem ) {
+    while ( aux != NULL ) {
         cout << aux->info.ID << " " ; 
-        next = aux->next ;
-        aux = next ;
+        aux = aux->next ;
     }
-return ; }
+    return ; }
 // Muestra la pila del tope al fondo
 
 void mover_de_pila (NODO *&TopePila1, NODO *&TopePila2) {
@@ -182,10 +179,13 @@ return ; }
 
 void startUP (FILE *archivo, NODO *&topepila) {
     strLuchador luchador ;
-    fseek(archivo, 0, SEEK_SET) ; // para leer desde el inicio
-    while (!feof(archivo)) { 
-        fread (&luchador, sizeof(strLuchador), 1, archivo) ;
+
+    if (archivo == NULL) { return; }
+
+    fseek (archivo, 0, SEEK_SET) ;  // para leer desde el inicio
+    while (fread (&luchador, sizeof(strLuchador), 1, archivo) == 1) {  // leer sólo cuando se obtuvo un registro completo
         agregar_a_pila(topepila, luchador) ;
+        OrdPila (topepila) ;
     }
 return ; }
 // Carga el contenido del archivo a la lista dinámica
@@ -193,21 +193,28 @@ return ; }
 void GuardarListaDinamica (FILE *archivo, NODO *&topepila) {
     NODO *aux = topepila , *next ;
     strLuchador luchador ;
-    fseek(archivo, 0, SEEK_SET);
+
+    fclose (archivo);
+    archivo = fopen("GIMNASIO.dat", "wb");
+    fseek (archivo, 0, SEEK_SET) ;
+
     while (aux != NULL) {
         copiar_de_pila (aux, luchador);
         fwrite (&luchador, sizeof(strLuchador), 1, archivo);
         next = aux->next ;
         aux = next;
     }
-    return;
-}
+
+    fflush(archivo);
+return ; }
 // Carga la lista dinámica al archivo binario
 
 void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) {
     NODO *aux = topepila ;
-    for (int i = 0; i < 5; i++) {
+    for (int i=0;i<5;i++) {
+        if (aux==NULL) { return ; }
         copiar_de_pila(aux, CombatesEstelares[i]) ;
+        cout << aux->info.ID << endl ;
         aux = aux -> next ;
     }
 return ; }
