@@ -79,7 +79,7 @@ int main() {
         cin >> opcion , posLuchador = 0 ;
         while (!((opcion>=0) && (opcion<6))) { 
             if (cin.fail()) { cin.clear(); }
-            cout << "Ingrese un input valido: "; cin >> opcion ;
+            cout << "Ingrese un input valido \n-> "; cin >> opcion ;
         }
         switch (opcion) {
             case 0 :
@@ -98,8 +98,17 @@ int main() {
                 actualizar_record (topePila) ;
                 break ;
             case 4 :
-                GuardarListaDinamica (archivo, topePila) ;
-                cout << "Archivo guardado" << endl ;
+                int seguro ;
+                cout << "Guardar el archivo elimina toda informacion previa, si esta seguro de esto presione 1. de lo contrario presione 0. " << endl ;
+                cout << "-> " ; cin >> seguro ;
+                while ((seguro!=0) && (seguro!=1)) { 
+                    if (cin.fail()) { cin.clear(); }
+                    cout << "Ingrese un input valido \n-> "; cin >> seguro ;
+                }
+                if (seguro==1) {
+                    GuardarListaDinamica (archivo, topePila) ;
+                    cout << "Archivo guardado" << endl ;
+                }
                 break ;
             case 5 :
                 cout << "Vaciando pila..." << endl ;
@@ -177,13 +186,12 @@ return ; }
 // Pila1 recibe el elemento, Pila2 entrega el elemento
 
 void vaciar_pila (NODO *&topepila) {
-    NODO *aux = topepila ;
     strLuchador erase ;
-    while (aux!=NULL) {
-        quitar_de_pila (aux, erase) ;
-        aux = aux->next ;
+    while (topepila!=NULL) {
+        quitar_de_pila (topepila, erase) ;
+        topepila = topepila->next ;
     }
-    delete aux ;
+    delete topepila ;
 return ; }
 // Vacia la pila
 
