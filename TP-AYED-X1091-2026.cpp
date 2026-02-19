@@ -39,7 +39,6 @@ struct strLuchador {
     int victorias;
     int derrotas;
 };
-
 struct NODO {
     strLuchador info;
     NODO *next;
@@ -51,12 +50,14 @@ void quitar_de_pila (NODO *&TopePila, strLuchador &n) ;
 void copiar_de_pila (NODO *TopePila, strLuchador &n) ;
 void mostrarpila (NODO *&topepila, int cantElem) ;
 void mover_de_pila (NODO *&TopePila1, NODO *&TopePila2) ;
+void vaciar_pila (NODO *&topepila) ;
 void startUP (FILE *archivo, NODO *&topepila) ;
 void GuardarListaDinamica (FILE *archivo, NODO *&topepila) ;
 void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) ;
 void OrdPila (NODO *&topepila) ;
 void inscribir_atleta (NODO *&topepila, int &PosLuchador) ;
 void actualizar_record (NODO *topepila) ;
+
 
 
 int main() { 
@@ -87,14 +88,7 @@ int main() {
                 break ;
             case 1 :
                 inscribir_atleta (topePila, posLuchador) ;
-                /*
-                cout << topePila->info.ID << endl ;
-                cout << topePila->info.nombre << endl ;
-                cout << topePila->info.apodo << endl ;
-                cout << topePila->info.peso << endl ;
-                cout << topePila->info.victorias << endl ;
-                cout << topePila->info.derrotas << endl ;
-                */
+                cout << topePila->info.apodo << " inscripto" << endl ;
                 break ;
             case 2 :
                 MainCard (topePila, CombatesEstelares) ;
@@ -108,8 +102,8 @@ int main() {
                 cout << "Archivo guardado" << endl ;
                 break ;
             case 5 :
-                cout << "Mostrando pila: " << endl ;
-                mostrarpila (topePila, posLuchador) ;
+                cout << "Vaciando pila..." << endl ;
+                vaciar_pila (topePila) ;  // Libera la memoria
                 break ;
         }
     } while (opcion != 5) ; 
@@ -117,6 +111,7 @@ int main() {
     fclose (archivo) ;
 
 return 0 ; }
+
 
 
 void agregar_a_pila (NODO *&topepila, strLuchador n) {
@@ -163,7 +158,11 @@ return ; }
 void mostrarpila (NODO *&topepila, int cantElem) {
     NODO *aux = topepila ;
     while ( aux != NULL ) {
-        cout << aux->info.ID << " " ; 
+        cout << "Registro: " << aux->info.ID << endl ;
+        cout << "Nombre: " << aux->info.nombre << endl ;
+        cout << "Nombre escenico: " << aux->info.apodo << endl ;
+        cout << "Peso: " << aux->info.peso << endl ;
+        cout << "Puntaje: " << aux->info.victorias - aux->info.derrotas << endl ;
         aux = aux->next ;
     }
     return ; }
@@ -176,6 +175,17 @@ void mover_de_pila (NODO *&TopePila1, NODO *&TopePila2) {
 return ; }
 // Mueve un elemento de una pila a la otra
 // Pila1 recibe el elemento, Pila2 entrega el elemento
+
+void vaciar_pila (NODO *&topepila) {
+    NODO *aux = topepila ;
+    strLuchador erase ;
+    while (aux!=NULL) {
+        quitar_de_pila (aux, erase) ;
+        aux = aux->next ;
+    }
+    delete aux ;
+return ; }
+// Vacia la pila
 
 void startUP (FILE *archivo, NODO *&topepila) {
     strLuchador luchador ;
@@ -214,7 +224,11 @@ void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) {
     for (int i=0;i<5;i++) {
         if (aux==NULL) { return ; }
         copiar_de_pila(aux, CombatesEstelares[i]) ;
-        cout << aux->info.ID << endl ;
+        cout << "Registro: " << aux->info.ID << endl ;
+        cout << "Nombre: " << aux->info.nombre << endl ;
+        cout << "Nombre escenico: " << aux->info.apodo << endl ;
+        cout << "Peso: " << aux->info.peso << endl ;
+        cout << "Puntaje: " << aux->info.victorias - aux->info.derrotas << endl ;
         aux = aux -> next ;
     }
 return ; }
@@ -298,4 +312,4 @@ void actualizar_record (NODO *topepila) {
         topeaux->info.derrotas = derrotas ;
     }
 return ; }
-// Actualiza el numero de victorias y/o derrotas de un atleta
+// Actualiza el numero de victorias y/o derrotas de un atleta en la pila
