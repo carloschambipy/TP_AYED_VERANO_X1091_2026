@@ -83,7 +83,6 @@ int main() {
                 break ;
             case 1 :
                 inscribir_atleta (topePila) ;
-                cout << topePila->info.apodo << " inscripto" << endl ;
                 break ;
             case 2 :
                 MainCard (topePila, CombatesEstelares) ;
@@ -205,9 +204,9 @@ void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) {
     for (int i=0; (i<5) && (topepila!=NULL); i++) {
         copiar_de_pila(topepila, CombatesEstelares[i]) ;
         mover_de_pila (aux, topepila) ;
-        cout << "Registro: " << aux->info.ID << endl ;
+        cout << "Id: " << aux->info.ID << endl ;
         cout << "Nombre: " << aux->info.nombre << endl ;
-        cout << "Nombre escenico: " << aux->info.apodo << endl ;
+        cout << "Apodo: " << aux->info.apodo << endl ;
         cout << "Peso: " << aux->info.peso << endl ;
         cout << "Puntaje: " << aux->info.victorias - aux->info.derrotas << endl ;
         cout << "\n" ;
@@ -269,6 +268,7 @@ void inscribir_atleta (NODO *&topepila) {
     cin >> nuevo.derrotas ;
 
     agregar_a_pila (topepila, nuevo) ;
+    cout << topePila->info.apodo << " inscripto" << endl ;
     OrdPila (topepila) ;
 return ; }
 // Añade un atleta a la pila 
@@ -316,3 +316,4 @@ void actualizar_record (NODO *&topepila) {
     OrdPila (topepila) ;
 return ; }
 // Actualiza el numero de victorias y/o derrotas de un atleta en la pila
+
