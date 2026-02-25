@@ -52,7 +52,7 @@ void mover_de_pila (NODO *&TopePila1, NODO *&TopePila2) ;
 void vaciar_pila (NODO *&topepila) ;
 void startUP (FILE *archivo, NODO *&topepila) ;
 void GuardarListaDinamica (FILE *archivo, NODO *&topepila) ;
-void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) ;
+void MainCard (NODO *&topepila, strLuchador CombatesEstelares[]) ;
 void OrdPila (NODO *&topepila) ;
 void inscribir_atleta (NODO *&topepila) ;
 void actualizar_record (NODO *&topepila) ;
@@ -67,8 +67,7 @@ int main() {
     
     int opcion, posLuchador = 0 ;
     do {
-        cout << "MENU OCTOGON PRO" << endl ;
-        cout << "Ingrese el numero de la opcion que desea ejecutar" << endl ;
+        cout << "_____OCTAGON PRO_____" << endl ;
         cout << "0. Cargar Gimnasio" << endl ;
         cout << "1. Inscribir un atleta" << endl ;
         cout << "2. Generar Main Card" << endl ;
@@ -94,7 +93,9 @@ int main() {
                 break ;
             case 4 :
                 int seguro ;
-                cout << "Guardar el archivo elimina toda informacion previa, si esta seguro de esto presione 1. de lo contrario presione 0. " << endl ;
+                cout << "Guardar el archivo elimina toda informacion previa."
+                << "\nSi esta seguro, ingrese [1]"  
+                << "\nDe lo contrario ingrese [0] " << endl ;
                 cout << "-> " ; cin >> seguro ;
                 if (seguro==1) {
                     GuardarListaDinamica (archivo, topePila) ;
@@ -200,18 +201,18 @@ void GuardarListaDinamica (FILE *archivo, NODO *&topepila) {
 return ; }
 // Carga la lista dinámica al archivo binario
 
-void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) {
+void MainCard (NODO *&topepila, strLuchador CombatesEstelares[]) {
     NODO *aux = NULL ;
+    cout << "\n_____MAIN CARD_____" << endl ;
     for (int i=0; (i<5) && (topepila!=NULL); i++) {
-        if (topepila==NULL) { return ; }
         copiar_de_pila(topepila, CombatesEstelares[i]) ;
-        mover_de_pila (aux, topepila) ;
-        cout << "Id: " << aux->info.ID << endl ;
-        cout << "Nombre: " << aux->info.nombre << endl ;
-        cout << "Apodo: " << aux->info.apodo << endl ;
-        cout << "Peso: " << aux->info.peso << endl ;
-        cout << "Puntaje: " << aux->info.victorias - aux->info.derrotas << endl ;
+        cout << "ID: " << CombatesEstelares[i].ID << endl ;
+        cout << "Nombre: " << CombatesEstelares[i].nombre << endl ;
+        cout << "Apodo: " << CombatesEstelares[i].apodo << endl ;
+        cout << "Peso: " << CombatesEstelares[i].peso << endl ;
+        cout << "Puntaje: " <<CombatesEstelares[i].victorias - CombatesEstelares[i].derrotas << endl ;
         cout << "\n" ;
+        mover_de_pila (aux, topepila) ;
     }
     while (aux!=NULL)  {
         mover_de_pila (topepila, aux) ;
@@ -264,13 +265,12 @@ void inscribir_atleta (NODO *&topepila) {
     cin.getline(nuevo.apodo, 35 + 1, '\n') ;
     cout << "Peso: " ;
     cin >> nuevo.peso ;
-    cout << "Victorias: " ;
+    cout << "Racha de Victorias: " ;
     cin >> nuevo.victorias ;
-    cout << "Derrotas: " ;
+    cout << "Racha de Derrotas: " ;
     cin >> nuevo.derrotas ;
 
     agregar_a_pila (topepila, nuevo) ;
-    cout << topepila->info.apodo << " inscripto" << endl ;
     OrdPila (topepila) ;
 return ; }
 // Añade un atleta a la pila 
@@ -318,8 +318,3 @@ void actualizar_record (NODO *&topepila) {
     OrdPila (topepila) ;
 return ; }
 // Actualiza el numero de victorias y/o derrotas de un atleta en la pila
-
-
-
-
-
