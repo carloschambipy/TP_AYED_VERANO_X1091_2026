@@ -191,11 +191,11 @@ void GuardarListaDinamica (FILE *archivo, NODO *&topepila) {
     strLuchador luchador ;
 
     fclose (archivo);
-    archivo = fopen("GIMNASIO.dat", "wb");
+    archivo = fopen("GIMNASIO.dat", "wb+");
 
     while (topepila != NULL) {
         quitar_de_pila (topepila, luchador);
-        fwrite (&luchador, sizeof(strLuchador), 1, archivo);
+        fwrite (&luchador, sizeof(strLuchador), 1, archivo); 
     }
 
     fflush(archivo);
@@ -318,4 +318,3 @@ void actualizar_record (NODO *&topepila) {
     OrdPila (topepila) ;
 return ; }
 // Actualiza el numero de victorias y/o derrotas de un atleta en la pila
-
