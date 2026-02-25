@@ -268,7 +268,7 @@ void inscribir_atleta (NODO *&topepila) {
     cin >> nuevo.derrotas ;
 
     agregar_a_pila (topepila, nuevo) ;
-    cout << topePila->info.apodo << " inscripto" << endl ;
+    cout << topepila->info.apodo << " inscripto" << endl ;
     OrdPila (topepila) ;
 return ; }
 // Añade un atleta a la pila 
@@ -316,4 +316,5 @@ void actualizar_record (NODO *&topepila) {
     OrdPila (topepila) ;
 return ; }
 // Actualiza el numero de victorias y/o derrotas de un atleta en la pila
+
 
