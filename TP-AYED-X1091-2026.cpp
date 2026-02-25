@@ -67,7 +67,8 @@ int main() {
     
     int opcion, posLuchador = 0 ;
     do {
-        cout << "____QUE DESEA HACER____" << endl ;
+        cout << "MENU OCTOGON PRO" << endl ;
+        cout << "Ingrese el numero de la opcion que desea ejecutar" << endl ;
         cout << "0. Cargar Gimnasio" << endl ;
         cout << "1. Inscribir un atleta" << endl ;
         cout << "2. Generar Main Card" << endl ;
@@ -316,5 +317,6 @@ void actualizar_record (NODO *&topepila) {
     OrdPila (topepila) ;
 return ; }
 // Actualiza el numero de victorias y/o derrotas de un atleta en la pila
+
 
 
