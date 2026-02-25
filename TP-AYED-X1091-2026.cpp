@@ -110,6 +110,7 @@ int main() {
     } while (opcion != 5) ; 
 
     fclose (archivo) ;
+    system("pause");
 
 return 0 ; }
 
@@ -317,3 +318,4 @@ void actualizar_record (NODO *&topepila) {
     OrdPila (topepila) ;
 return ; }
 // Actualiza el numero de victorias y/o derrotas de un atleta en la pila
+
