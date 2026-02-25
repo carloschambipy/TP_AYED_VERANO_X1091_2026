@@ -67,7 +67,7 @@ int main() {
     
     int opcion, posLuchador = 0 ;
     do {
-        cout << "_____OCTAGON PRO_____" << endl ;
+        cout << "\n_____OCTAGON PRO_____" << endl ;
         cout << "0. Cargar Gimnasio" << endl ;
         cout << "1. Inscribir un atleta" << endl ;
         cout << "2. Generar Main Card" << endl ;
@@ -218,8 +218,7 @@ void MainCard (NODO *&topepila, strLuchador CombatesEstelares[]) {
         mover_de_pila (topepila, aux) ;
     }
 return ; }
-// Copia los primeros cinco elementos de la pila a CombatesEstelares[]
-// No mueve el tope de pila ni borra elementos
+// Copia los primeros cinco elementos de la pila a CombatesEstelares[]. No mueve el tope de pila ni borra elementos
 
 void OrdPila (NODO *&topepila) {
     if (topepila == NULL || topepila->next == NULL) { return; } // nada que ordenar
@@ -265,9 +264,9 @@ void inscribir_atleta (NODO *&topepila) {
     cin.getline(nuevo.apodo, 35 + 1, '\n') ;
     cout << "Peso: " ;
     cin >> nuevo.peso ;
-    cout << "Racha de Victorias: " ;
+    cout << "Victorias: " ;
     cin >> nuevo.victorias ;
-    cout << "Racha de Derrotas: " ;
+    cout << "Derrotas: " ;
     cin >> nuevo.derrotas ;
 
     agregar_a_pila (topepila, nuevo) ;
