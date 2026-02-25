@@ -203,6 +203,7 @@ return ; }
 void MainCard (NODO *topepila, strLuchador CombatesEstelares[]) {
     NODO *aux = NULL ;
     for (int i=0; (i<5) && (topepila!=NULL); i++) {
+        if (topepila==NULL) { return ; }
         copiar_de_pila(topepila, CombatesEstelares[i]) ;
         mover_de_pila (aux, topepila) ;
         cout << "Id: " << aux->info.ID << endl ;
@@ -317,6 +318,7 @@ void actualizar_record (NODO *&topepila) {
     OrdPila (topepila) ;
 return ; }
 // Actualiza el numero de victorias y/o derrotas de un atleta en la pila
+
 
 
 
