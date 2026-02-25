@@ -263,9 +263,9 @@ void inscribir_atleta (NODO *&topepila) {
     cin.getline(nuevo.apodo, 35 + 1, '\n') ;
     cout << "Peso: " ;
     cin >> nuevo.peso ;
-    cout << "Racha de Victorias: " ;
+    cout << "Victorias: " ;
     cin >> nuevo.victorias ;
-    cout << "Racha de Derrotas: " ;
+    cout << "Derrotas: " ;
     cin >> nuevo.derrotas ;
 
     agregar_a_pila (topepila, nuevo) ;
@@ -317,6 +317,7 @@ void actualizar_record (NODO *&topepila) {
     OrdPila (topepila) ;
 return ; }
 // Actualiza el numero de victorias y/o derrotas de un atleta en la pila
+
 
 
 
