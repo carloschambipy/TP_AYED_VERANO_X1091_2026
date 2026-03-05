@@ -25,7 +25,7 @@ Requerimientos Funcionales:
         ● Cargar Gimnasio: Al iniciar, el programa debe leer el archivo y reconstruir la lista en memoria.
 
 
-Este programa fue escrito en Visual Studio Code
+* Este programa fue escrito en Visual Studio Code *
 */
 
 // c++
@@ -159,9 +159,7 @@ return ; }
 
 void vaciar_pila (NODO *&topepila) {
     strLuchador erase ;
-    while (topepila!=NULL) {
-        quitar_de_pila (topepila, erase) ;
-    }
+    while (topepila!=NULL) { quitar_de_pila (topepila, erase) ; }
     delete topepila ;
 return ; }
 // Vacia la pila
