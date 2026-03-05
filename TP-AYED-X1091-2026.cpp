@@ -86,6 +86,7 @@ int main() {
                 break ;
             case 1 :
                 inscribir_atleta (topePila) ;
+                cout << "Atleta inscripto" << endl;
                 break ;
             case 2 :
                 MainCard (topePila, CombatesEstelares) ;
@@ -93,6 +94,7 @@ int main() {
                 break ;
             case 3 :
                 actualizar_record (topePila) ;
+                cout << "Record actualizado" << endl;
                 break ;
             case 4 :
                 int seguro ;
@@ -100,7 +102,7 @@ int main() {
                 << "\nSi esta seguro, ingrese [1]"  
                 << "\nDe lo contrario ingrese [0] " << endl ;
                 cout << "-> " ; cin >> seguro ;
-                if (seguro==1) {
+                if (seguro == 1) {
                     GuardarListaDinamica (archivo, topePila) ;
                     cout << "Archivo guardado" << endl ;
                 }
@@ -165,15 +167,28 @@ return ; }
 // Vacia la pila
 
 void startUP (FILE *archivo, NODO *&topepila) {
-    strLuchador luchador ;
-
+    strLuchador luchadorViejo, luchadorArchivo;
+    NODO *topeaux = NULL;
     if (archivo == NULL) { return ; }
-
     fseek (archivo, 0, SEEK_SET) ; 
-    while (fread (&luchador, sizeof(strLuchador), 1, archivo) == 1) { 
-        agregar_a_pila(topepila, luchador) ;
-        OrdPila (topepila) ;
+    while (fread (&luchadorArchivo, sizeof(strLuchador), 1, archivo) == 1) { 
+        bool yaExiste = false;
+        while (topepila != NULL) {
+            quitar_de_pila(topepila, luchadorViejo);
+            if (luchadorViejo.ID == luchadorArchivo.ID) {
+                yaExiste = true;
+            }
+            agregar_a_pila(topeaux, luchadorViejo);
+        }
+        while (topeaux != NULL) {
+            mover_de_pila(topepila, topeaux);
+        }
+        if (!yaExiste) {
+            agregar_a_pila(topepila, luchadorArchivo);
+            OrdPila(topepila);
+        }
     }
+    return ; 
 return ; }
 // Carga el contenido del archivo a la lista dinámica
 
@@ -314,3 +329,4 @@ void actualizar_record (NODO *&topepila) {
     OrdPila (topepila) ;
 return ; }
 // Actualiza el numero de victorias y/o derrotas de un atleta en la pila
+
