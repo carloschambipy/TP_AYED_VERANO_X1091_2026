@@ -23,6 +23,9 @@ Requerimientos Funcionales:
         ● Actualizar Récord: Buscar un luchador por ID y modificar su contador de victorias/derrotas.
         ● Guardar Gimnasio: Volcar la lista dinámica al archivo de disco.
         ● Cargar Gimnasio: Al iniciar, el programa debe leer el archivo y reconstruir la lista en memoria.
+
+
+Este programa fue escrito en Visual Studio Code
 */
 
 // c++
@@ -51,7 +54,7 @@ void copiar_de_pila (NODO *TopePila, strLuchador &n) ;
 void mover_de_pila (NODO *&TopePila1, NODO *&TopePila2) ;
 void vaciar_pila (NODO *&topepila) ;
 void startUP (FILE *archivo, NODO *&topepila) ;
-void GuardarListaDinamica (FILE *archivo, NODO *&topepila) ;
+void GuardarListaDinamica (FILE *&archivo, NODO *&topepila) ;
 void MainCard (NODO *&topepila, strLuchador CombatesEstelares[]) ;
 void OrdPila (NODO *&topepila) ;
 void inscribir_atleta (NODO *&topepila) ;
@@ -92,15 +95,8 @@ int main() {
                 actualizar_record (topePila) ;
                 break ;
             case 4 :
-                int seguro ;
-                cout << "Guardar el archivo elimina toda informacion previa."
-                << "\nSi esta seguro, ingrese [1]"  
-                << "\nDe lo contrario ingrese [0] " << endl ;
-                cout << "-> " ; cin >> seguro ;
-                if (seguro==1) {
                     GuardarListaDinamica (archivo, topePila) ;
                     cout << "Archivo guardado" << endl ;
-                }
                 break ;
             case 5 :
                 cout << "Vaciando pila..." << endl ;
@@ -146,17 +142,6 @@ void quitar_de_pila (NODO *&TopePila, strLuchador &n) {
 return ; }
 // Quita el último Nodo de la pila
 
-void copiar_de_pila (NODO *TopePila, strLuchador &n) {
-    n.ID = TopePila->info.ID ;
-    strcpy(n.nombre, TopePila->info.nombre) ;
-    strcpy(n.apodo, TopePila->info.apodo) ;
-    n.peso = TopePila->info.peso ;
-    n.victorias = TopePila->info.victorias ;
-    n.derrotas = TopePila->info.derrotas ; 
-return ; }
-// Copia en la variable que se le pase la información del puntero de pila que se le pase
-// No mueve el puntero de pila
-
 void mover_de_pila (NODO *&TopePila1, NODO *&TopePila2) {
     strLuchador elem_a_mover ;
     quitar_de_pila (TopePila2, elem_a_mover) ; 
@@ -177,18 +162,20 @@ return ; }
 void startUP (FILE *archivo, NODO *&topepila) {
     strLuchador luchador ;
 
-    if (archivo == NULL) { return; }
+    if (archivo == NULL) { return ; }
 
-    fseek (archivo, 0, SEEK_SET) ;  // para leer desde el inicio
-    while (fread (&luchador, sizeof(strLuchador), 1, archivo) == 1) {  // leer sólo cuando se obtuvo un registro completo
+    vaciar_pila(topepila);
+    fseek (archivo, 0, SEEK_SET) ; 
+    while (fread (&luchador, sizeof(strLuchador), 1, archivo) == 1) { 
         agregar_a_pila(topepila, luchador) ;
         OrdPila (topepila) ;
     }
 return ; }
 // Carga el contenido del archivo a la lista dinámica
 
-void GuardarListaDinamica (FILE *archivo, NODO *&topepila) {
+void GuardarListaDinamica (FILE *&archivo, NODO *&topepila) {
     strLuchador luchador ;
+    NODO *topeaux = NULL ;
 
     fclose (archivo);
     archivo = fopen("GIMNASIO.dat", "wb+");
@@ -196,6 +183,11 @@ void GuardarListaDinamica (FILE *archivo, NODO *&topepila) {
     while (topepila != NULL) {
         quitar_de_pila (topepila, luchador);
         fwrite (&luchador, sizeof(strLuchador), 1, archivo); 
+        agregar_a_pila(topeaux, luchador);
+    }
+
+    while (topeaux != NULL) {
+        mover_de_pila (topepila, topeaux);
     }
 
     fflush(archivo);
@@ -206,14 +198,14 @@ void MainCard (NODO *&topepila, strLuchador CombatesEstelares[]) {
     NODO *aux = NULL ;
     cout << "\n_____MAIN CARD_____" << endl ;
     for (int i=0; (i<5) && (topepila!=NULL); i++) {
-        copiar_de_pila(topepila, CombatesEstelares[i]) ;
+        quitar_de_pila(topepila, CombatesEstelares[i]) ;
         cout << "ID: " << CombatesEstelares[i].ID << endl ;
         cout << "Nombre: " << CombatesEstelares[i].nombre << endl ;
         cout << "Apodo: " << CombatesEstelares[i].apodo << endl ;
         cout << "Peso: " << CombatesEstelares[i].peso << endl ;
         cout << "Puntaje: " <<CombatesEstelares[i].victorias - CombatesEstelares[i].derrotas << endl ;
         cout << "\n" ;
-        mover_de_pila (aux, topepila) ;
+        agregar_a_pila(aux, CombatesEstelares[i]) ;
     }
     while (aux!=NULL)  {
         mover_de_pila (topepila, aux) ;
@@ -222,7 +214,16 @@ return ; }
 // Copia los primeros cinco elementos de la pila a CombatesEstelares[]. No mueve el tope de pila ni borra elementos
 
 void OrdPila (NODO *&topepila) {
-    if (topepila == NULL || topepila->next == NULL) { return; } // nada que ordenar
+    if (topepila == NULL) { return ; }
+    if (topepila != NULL) { 
+        strLuchador n ;
+        quitar_de_pila (topepila, n) ;
+        if (topepila == NULL) {
+            agregar_a_pila (topepila, n) ;
+            return ;
+        }
+        else { agregar_a_pila (topepila, n) ; }
+    } // nada que ordenar
 
     // extraigo el elemento a insertar
     strLuchador luchador ;
@@ -233,22 +234,19 @@ void OrdPila (NODO *&topepila) {
 
     // muevo los elementos con puntaje mayor arriba de la pila auxiliar
     while (topepila != NULL) {
-        int puntajeTop = topepila->info.victorias - topepila->info.derrotas ;
-        if (puntajeTop > puntajeLuch) {
-            mover_de_pila(SortPile, topepila) ;
-        } 
-        else {
-            break ;
-        }
+        strLuchador TOP ;
+        quitar_de_pila (topepila, TOP) ;
+        agregar_a_pila (topepila, TOP) ;
+        int puntajeTop = TOP.victorias - TOP.derrotas ;
+        if (puntajeTop > puntajeLuch) { mover_de_pila (SortPile, topepila) ; } 
+        else { break ; }
     }
 
     // inserto el elemento en su lugar
     agregar_a_pila(topepila, luchador) ;
 
     // vuelvo a poner los elementos movidos
-    while (SortPile != NULL) {
-        mover_de_pila(topepila, SortPile) ;
-    }
+    while (SortPile != NULL) { mover_de_pila (topepila, SortPile) ; }
 return ; }
 // Ordena un elemento en la pila por victorias - derrotas
 
@@ -278,23 +276,23 @@ return ; }
 void actualizar_record (NODO *&topepila) { 
     NODO *topeaux = NULL ;
     strLuchador aux ;
+    aux.ID = -1 ; // El ID -1 queda reservado para este control
     int IDatleta , victorias , derrotas , opcion ;
     cout << "Ingrese el ID del atleta: " ; cin >> IDatleta ;
 
     // buscar el ID, comprobando primero el puntero
-    while (topepila != NULL && topepila->info.ID != IDatleta) {
-        mover_de_pila (topeaux, topepila) ;
+    while (topepila != NULL && aux.ID != IDatleta) {
+        quitar_de_pila (topepila, aux) ;
+        agregar_a_pila (topeaux, aux) ;
     }
 
-    if (topepila==NULL) {
+    if (aux.ID != IDatleta) {
         cout << "ID No encontrado " << endl ; 
-        while (topeaux!=NULL)  {
-            mover_de_pila (topepila, topeaux) ;
-        }
+        while (topeaux!=NULL)  { mover_de_pila (topepila, topeaux) ; }
         return ;
     }
 
-    quitar_de_pila (topepila, aux) ;
+    quitar_de_pila (topeaux, aux) ;
 
     cout << "Desea actualizar: " << endl ; 
     cout << "1. Numero de Victorias " << endl ; 
