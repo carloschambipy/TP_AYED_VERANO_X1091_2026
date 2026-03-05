@@ -95,8 +95,15 @@ int main() {
                 actualizar_record (topePila) ;
                 break ;
             case 4 :
+                int seguro ;
+                cout << "Guardar el archivo elimina toda informacion previa."
+                << "\nSi esta seguro, ingrese [1]"  
+                << "\nDe lo contrario ingrese [0] " << endl ;
+                cout << "-> " ; cin >> seguro ;
+                if (seguro==1) {
                     GuardarListaDinamica (archivo, topePila) ;
                     cout << "Archivo guardado" << endl ;
+                }
                 break ;
             case 5 :
                 cout << "Vaciando pila..." << endl ;
@@ -164,7 +171,6 @@ void startUP (FILE *archivo, NODO *&topepila) {
 
     if (archivo == NULL) { return ; }
 
-    vaciar_pila(topepila);
     fseek (archivo, 0, SEEK_SET) ; 
     while (fread (&luchador, sizeof(strLuchador), 1, archivo) == 1) { 
         agregar_a_pila(topepila, luchador) ;
@@ -175,7 +181,6 @@ return ; }
 
 void GuardarListaDinamica (FILE *&archivo, NODO *&topepila) {
     strLuchador luchador ;
-    NODO *topeaux = NULL ;
 
     fclose (archivo);
     archivo = fopen("GIMNASIO.dat", "wb+");
@@ -183,11 +188,6 @@ void GuardarListaDinamica (FILE *&archivo, NODO *&topepila) {
     while (topepila != NULL) {
         quitar_de_pila (topepila, luchador);
         fwrite (&luchador, sizeof(strLuchador), 1, archivo); 
-        agregar_a_pila(topeaux, luchador);
-    }
-
-    while (topeaux != NULL) {
-        mover_de_pila (topepila, topeaux);
     }
 
     fflush(archivo);
